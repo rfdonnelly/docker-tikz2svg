@@ -1,0 +1,30 @@
+= docker-tikz2svg
+
+A work-in-progress Docker image that converts TikZ picture to an SVG.
+
+== Build
+
+ docker build -t tikz2svg .
+
+== Run
+
+[source,sh]
+docker run \
+    --rm \
+    --user $(id -u):$(id -g) \
+    --volume "$PWD":/src \
+    --workdir /src \
+    tikz2svg \
+    dvisvgm --help
+
+== References
+
+The following references were helpful in developing this.
+
+* Various recommendations TikZ to SVG
++
+https://tex.stackexchange.com/questions/51757/how-can-i-use-tikz-to-make-standalone-svg-graphics
+
+* Post on dvisvgm integration
++
+https://www.andrewheiss.com/blog/2021/08/27/tikz-knitr-html-svg-fun/

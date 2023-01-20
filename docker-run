@@ -1,0 +1,10 @@
+#!/bin/sh
+
+docker run \
+    -it \
+    --rm \
+    --user $(id -u):$(id -g) \
+    --volume "$PWD":/src \
+    --workdir /src \
+    tikz2svg \
+    "$@"
