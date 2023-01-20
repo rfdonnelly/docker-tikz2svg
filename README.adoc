@@ -1,6 +1,6 @@
 = docker-tikz2svg
 
-A Docker image that converts TikZ picture to an SVG.
+A Docker image that converts a TikZ picture to an SVG.
 
 == Build
 
