@@ -1,6 +1,6 @@
 = docker-tikz2svg
 
-A work-in-progress Docker image that converts TikZ picture to an SVG.
+A Docker image that converts TikZ picture to an SVG.
 
 == Build
 
@@ -9,13 +9,25 @@ A work-in-progress Docker image that converts TikZ picture to an SVG.
 == Run
 
 [source,sh]
+----
 docker run \
     --rm \
     --user $(id -u):$(id -g) \
     --volume "$PWD":/src \
     --workdir /src \
     tikz2svg \
-    dvisvgm --help
+    latex example.tex
+
+docker run \
+    --rm \
+    --user $(id -u):$(id -g) \
+    --volume "$PWD":/src \
+    --workdir /src \
+    tikz2svg \
+    dvisvgm --font-format=woff example.dvi
+
+file example.svg
+----
 
 == References
 
