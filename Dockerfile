@@ -29,3 +29,6 @@ RUN apk add --no-cache \
     ghostscript
 
 COPY --from=dvisvgm-builder /usr/local/bin/dvisvgm /usr/local/bin
+COPY bin/tikz2svg /usr/local/bin
+
+CMD ["tikz2svg"]

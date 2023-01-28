@@ -1,0 +1,13 @@
+= Example
+
+[source,sh]
+----
+docker run \
+    --rm \
+    --interactive \
+    --attach stdin \
+    --attach stdout \
+    tikz2svg \
+    <example.tex \
+    >example.svg
+----

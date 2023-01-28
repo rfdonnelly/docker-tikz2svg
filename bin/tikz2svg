@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -x
+set -e
+
+tempdir=$(mktemp --directory)
+
+function cleanup() {
+    rm -rf $tempdir
+}
+
+trap cleanup 0
+
+cd $tempdir
+# Write stdin to file.tex
+cat >file.tex
+latex file.tex >/dev/null
+dvisvgm --font-format=woff file.dvi
+# Write file.svg to stdout
+cat file.svg
+
+rm -rf $tempdir

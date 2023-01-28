@@ -8,6 +8,26 @@ A Docker image that converts a TikZ picture to an SVG.
 
 == Run
 
+=== Using the tikz2svg Helper Script
+
+This is the recommended flow.
+
+[source,sh]
+----
+docker run \
+    --rm \
+    --interactive \
+    --attach stdin \
+    --attach stdout \
+    tikz2svg \
+    <input.tex \
+    >output.svg
+----
+
+=== Using latex and dvisvgm Directly
+
+This flow is useful for debug.
+
 [source,sh]
 ----
 docker run \
