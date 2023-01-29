@@ -52,11 +52,23 @@ file example.svg
 
 == Examples
 
+=== Complete Graph
+
 image::examples/complete-graph/output.svg[]
+
+link:examples/complete-graph/input.tex[]
+
+=== Karnaugh Diagram
 
 image::examples/karnaugh-diagram/output.svg[]
 
+link:examples/karnaugh-diagram/input.tex[]
+
+=== Timing Diagram
+
 image::examples/timing-diagram/output.svg[]
+
+link:examples/timing-diagram/input.tex[]
 
 == References
 
