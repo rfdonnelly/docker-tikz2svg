@@ -54,21 +54,18 @@ file example.svg
 
 === Complete Graph
 
+.Generated from: link:examples/complete-graph/input.tex[]
 image::examples/complete-graph/output.svg[]
-
-link:examples/complete-graph/input.tex[]
 
 === Karnaugh Diagram
 
+.Generated from: link:examples/karnaugh-diagram/input.tex[]
 image::examples/karnaugh-diagram/output.svg[]
-
-link:examples/karnaugh-diagram/input.tex[]
 
 === Timing Diagram
 
+.Generated from: link:examples/timing-diagram/input.tex[]
 image::examples/timing-diagram/output.svg[]
-
-link:examples/timing-diagram/input.tex[]
 
 == References
 
