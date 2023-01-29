@@ -50,6 +50,14 @@ docker run \
 file example.svg
 ----
 
+== Examples
+
+image::examples/complete-graph/output.svg[]
+
+image::examples/karnaugh-diagram/output.svg[]
+
+image::examples/timing-diagram/output.svg[]
+
 == References
 
 The following references were helpful in developing this.
