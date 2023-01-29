@@ -28,6 +28,11 @@ RUN apk add --no-cache \
     texlive \
     ghostscript
 
+RUN apk add --no-cache \
+    texmf-dist-latexextra \
+    texmf-dist-pictures \
+    texmf-dist-science
+
 COPY --from=dvisvgm-builder /usr/local/bin/dvisvgm /usr/local/bin
 COPY bin/tikz2svg /usr/local/bin
 

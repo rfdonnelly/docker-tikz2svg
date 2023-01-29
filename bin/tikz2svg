@@ -14,9 +14,9 @@ trap cleanup 0
 cd $tempdir
 # Write stdin to file.tex
 cat >file.tex
-latex file.tex >/dev/null
+latex file.tex 1>&2
 dvisvgm --font-format=woff file.dvi
 # Write file.svg to stdout
-cat file.svg
+cat *.svg
 
 rm -rf $tempdir
