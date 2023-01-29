@@ -24,11 +24,9 @@ RUN \
 FROM alpine:$ALPINE_VERSION
 
 RUN apk add --no-cache \
-    texmf-dist \
+    ghostscript \
     texlive \
-    ghostscript
-
-RUN apk add --no-cache \
+    texmf-dist \
     texmf-dist-latexextra \
     texmf-dist-pictures \
     texmf-dist-science
