@@ -14,7 +14,7 @@ RUN apk add --no-cache \
 ARG DVISVGM_VERSION=3.0.1
 
 RUN \
-    curl -LO https://github.com/mgieseki/dvisvgm/releases/download/3.0.1/dvisvgm-3.0.1.tar.gz \
+    curl -LO https://github.com/mgieseki/dvisvgm/releases/download/$DVISVGM_VERSION/dvisvgm-$DVISVGM_VERSION.tar.gz \
     && tar xf dvisvgm-$DVISVGM_VERSION.tar.gz \
     && cd dvisvgm-$DVISVGM_VERSION \
     && ./configure --enable-bundled-libs \
