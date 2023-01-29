@@ -9,6 +9,6 @@ docker run \
     --attach stdout \
     --attach stderr \
     tikz2svg \
-    <example.tex \
-    >example.svg
+    <input.tex \
+    >output.svg
 ----
