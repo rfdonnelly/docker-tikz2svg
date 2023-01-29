@@ -38,6 +38,11 @@ image::examples/karnaugh-diagram/output.svg[]
 .Generated from: link:examples/timing-diagram/input.tex[]
 image::examples/timing-diagram/output.svg[]
 
+=== Focused Ion Beam System
+
+.Generated from: link:examples/focused-ion-beam-system/input.tex[]
+image::examples/focused-ion-beam-system/output.svg[]
+
 == References
 
 The following references were helpful in developing this.
