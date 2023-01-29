@@ -29,6 +29,7 @@ RUN apk add --no-cache \
     texmf-dist \
     texmf-dist-latexextra \
     texmf-dist-pictures \
+    texmf-dist-pstricks \
     texmf-dist-science
 
 COPY --from=dvisvgm-builder /usr/local/bin/dvisvgm /usr/local/bin
