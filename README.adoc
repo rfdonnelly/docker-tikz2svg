@@ -51,7 +51,7 @@ image::examples/periodic-table/output.svg[]
 === Fourier Series
 
 .Generated from: link:examples/fourier-series/input.tex[]
-image::examples/fourier-series/output.svg[]
+image::examples/fourier-series/output.svg[width=100%]
 
 == References
 
