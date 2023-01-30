@@ -48,6 +48,11 @@ image::examples/focused-ion-beam-system/output.svg[]
 .Generated from: link:examples/periodic-table/input.tex[]
 image::examples/periodic-table/output.svg[]
 
+=== Fourier Series
+
+.Generated from: link:examples/fourier-series/input.tex[]
+image::examples/fourier-series/output.svg[]
+
 == References
 
 The following references were helpful in developing this.
