@@ -43,6 +43,11 @@ image::examples/timing-diagram/output.svg[]
 .Generated from: link:examples/focused-ion-beam-system/input.tex[]
 image::examples/focused-ion-beam-system/output.svg[]
 
+=== Periodic Table
+
+.Generated from: link:examples/periodic-table/input.tex[]
+image::examples/periodic-table/output.svg[]
+
 == References
 
 The following references were helpful in developing this.
