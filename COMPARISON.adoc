@@ -70,6 +70,7 @@ Must compile from source.
 Not compatible with new C-based PDF interpreter.
 * (-) Does not render the focused ion beam example properly.
 However, this might be an environment issue (e.g. incompatibility with GhostScript 10.0.0) since the dvisvgm FAQ https://dvisvgm.de/FAQ/#clipping-issues[shows it rendering correctly].
+Or it might be a regression where it worked at one point but stopped working at some point.
 
 === tex4ht
 
