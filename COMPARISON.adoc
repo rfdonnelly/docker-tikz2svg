@@ -1,0 +1,113 @@
+= Comparison of TikZ to SVG Solutions
+:toc: macro
+
+This is an attempt to identify and compare the various solutions for converting TikZ to SVG.
+
+This comparison optimizes for SVG output with special attention to the handling of fonts, filesize, and SVG client compatability.
+Other outputs like PNG are a nice to have but have no bearing on the comparisons.
+
+toc::[]
+
+== Solutions
+
+=== pdf2svg
+
+Do not use.
+Author recommends using `pdftocairo` instead.
+
+[quote,Author of pdf2svg]
+I recommend that you use [pdftocairo] since it is better maintained than [pdf2svg].
+
+* Homepage: https://cityinthesky.co.uk/opensource/pdf2svg/
+* Repo: https://github.com/dawbarton/pdf2svg/
+
+*Pros and Cons*
+
+* (-) No longer maintained
+
+=== pdftocairo
+
+Promising.
+Evaluate further.
+
+* Homepage: https://poppler.freedesktop.org/
+* Repo: https://gitlab.freedesktop.org/poppler/poppler
+* Documentation: https://man.archlinux.org/man/pdftocairo.1.en
+
+*Pros and Cons*
+
+* (+) Actively maintained
+* (+) Part of the Poppler project
+* (+) Several output options including SVG
+* (+) Available in the Alpine Linux package repository.
+See https://pkgs.alpinelinux.org/contents?file=pdftocairo&path=&name=&branch=v3.17[pdftocairo] in the https://pkgs.alpinelinux.org/package/v3.17/main/x86_64/poppler-utils[poppler-utils package].
+* (-) Seems to have bugs with image scaling.
+SVG image size is smaller than PDF image size.
+This seems to be due to absence of units so px units get inferred when it should be explicit pt units.
+PNG image size is larger than PDF image size.
+* (-) Larger SVG file size than dvisvgm pdf->svg.
+Could use a separate utility to optimize the SVG.
+
+=== dvisvgm
+
+Promising.
+Evaluate further.
+
+* Homepage: https://dvisvgm.de
+* Repo: https://github.com/mgieseki/dvisvgm
+
+*Pros and Cons*
+
+* (+) Actively maintained
+* (+) Can embed fonts which allows proper font rendering and selecting of text in browsers.
+* (-) Not available in the Alpine Linux package repository.
+See https://pkgs.alpinelinux.org/contents?file=dvisvgm&path=&name=&branch=v3.17[dvisvgm].
+Must compile from source.
+* (-) Relies on deprecated GhostScript PostScript-based PDF interpreter which will be removed in GhostScript 10.01.0 in spring 2023.
+Not compatible with new C-based PDF interpreter.
+* (-) Does not render the focused ion beam example properly.
+However, this might be an environment issue (e.g. incompatibility with GhostScript 10.0.0) since the dvisvgm FAQ https://dvisvgm.de/FAQ/#clipping-issues[shows it rendering correctly].
+
+=== tex4ht
+
+* (-) Requires special commands in LaTeX source file?
+
+== dvisvgm vs pdftocairo
+
+[cols="a,a,a"]
+|===
+
+|dvisvgm (dvi) |dvisvgm (pdf) |pdftocairo
+
+|image::examples/complete-graph/dvisvgm-dvi.svg[]
+|image::examples/complete-graph/dvisvgm-pdf.svg[]
+|image::examples/complete-graph/pdftocairo.svg[]
+
+|image::examples/karnaugh-diagram/dvisvgm-dvi.svg[]
+|image::examples/karnaugh-diagram/dvisvgm-pdf.svg[]
+|image::examples/karnaugh-diagram/pdftocairo.svg[]
+
+|image::examples/timing-diagram/dvisvgm-dvi.svg[]
+|image::examples/timing-diagram/dvisvgm-pdf.svg[]
+|image::examples/timing-diagram/pdftocairo.svg[]
+
+|image::examples/focused-ion-beam-system/dvisvgm-dvi.svg[]
+|image::examples/focused-ion-beam-system/dvisvgm-pdf.svg[]
+|image::examples/focused-ion-beam-system/pdftocairo.svg[]
+
+|image::examples/periodic-table/dvisvgm-dvi.svg[]
+|image::examples/periodic-table/dvisvgm-pdf.svg[]
+|image::examples/periodic-table/pdftocairo.svg[]
+
+|image::examples/fourier-series/dvisvgm-dvi.svg[]
+|image::examples/fourier-series/dvisvgm-pdf.svg[]
+|image::examples/fourier-series/pdftocairo.svg[]
+
+|===
+
+[appendix]
+== References
+
+* This thread on StackExchange was used as a starting point for this comparison: https://tex.stackexchange.com/questions/51757/how-can-i-use-tikz-to-make-standalone-svg-graphics
+
+* The PGF/TikZ Manual is the authoratative source on processing PGF/TikZ: https://pgf-tikz.github.io/pgf/pgfmanual.pdf
