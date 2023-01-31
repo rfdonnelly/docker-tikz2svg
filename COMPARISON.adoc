@@ -41,8 +41,12 @@ Evaluate further.
 * (+) Several output options including SVG
 * (+) Available in the Alpine Linux package repository.
 See https://pkgs.alpinelinux.org/contents?file=pdftocairo&path=&name=&branch=v3.17[pdftocairo] in the https://pkgs.alpinelinux.org/package/v3.17/main/x86_64/poppler-utils[poppler-utils package].
-
-* TODO dependencies
+* (-) Seems to have bugs with image scaling.
+SVG image size is smaller than PDF image size.
+This seems to be due to absence of units so px units get inferred when it should be explicit pt units.
+PNG image size is larger than PDF image size.
+* (-) Larger SVG file size than dvisvgm pdf->svg.
+Could use a separate utility to optimize the SVG.
 
 === dvisvgm
 
@@ -63,8 +67,6 @@ Must compile from source.
 Not compatible with new C-based PDF interpreter.
 * (-) Does not render the focused ion beam example properly.
 However, this might be an environment issue (e.g. incompatibility with GhostScript 10.0.0) since the dvisvgm FAQ https://dvisvgm.de/FAQ/#clipping-issues[shows it rendering correctly].
-
-* TODO dependencies
 
 === tex4ht
 
