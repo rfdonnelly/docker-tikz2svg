@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     zlib-dev \
     curl
 
-ARG DVISVGM_VERSION=3.0.1
+ARG DVISVGM_VERSION=3.0.2
 
 RUN \
     curl -LO https://github.com/mgieseki/dvisvgm/releases/download/$DVISVGM_VERSION/dvisvgm-$DVISVGM_VERSION.tar.gz \
