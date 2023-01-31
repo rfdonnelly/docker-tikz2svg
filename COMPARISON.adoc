@@ -47,6 +47,9 @@ This seems to be due to absence of units so px units get inferred when it should
 PNG image size is larger than PDF image size.
 * (-) Larger SVG file size than dvisvgm pdf->svg.
 Could use a separate utility to optimize the SVG.
+* (-) Does not embed fonts.
+Converts all fonts to paths.
+This provides a consistent render across renderers but prevents select/copy of text in browsers and increases file size.
 
 === dvisvgm
 
