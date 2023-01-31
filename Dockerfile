@@ -25,6 +25,7 @@ FROM alpine:$ALPINE_VERSION
 
 RUN apk add --no-cache \
     ghostscript \
+    poppler-utils \
     texlive \
     texmf-dist \
     texmf-dist-latexextra \

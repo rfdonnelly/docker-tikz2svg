@@ -3,9 +3,99 @@
 set -x
 set -e
 
+# Latex Options:
+#
+# * -no-shell-escape - Prevent the ability to run shell commands restricted or
+# otherwise since we are potentially processing untrusted input.
+# * -halt-on-error - Halt on first error.
+LATEX_OPTIONS="-no-shell-escape -halt-on-error"
+
+# Dvisvgm Options:
+#
+# * --font-format=woff - Embeds fonts in the SVG using the Web Open Font
+# Format. This increases the size of the SVG but improves font rendering.
+DVISVGM_OPTIONS="--font-format=woff"
+
+print_help() {
+    cat <EOF
+Usage: $0 [options]
+
+Options:
+      --ir IR - The intermediate representation. Valid values: dvi, pdf. Default: pdf
+  -o, --output OUTPUT - The output format. Valid values: jpeg, pdf, png, svg. Default: svg
+  -t, --tool TOOL - The tool to use to generate the output. Valid values: dvisvgm, pdftocairo. Default: pdftocairo
+
+Valid combinations:
+
+  * When TOOL is dvisvgm, OUTPUT must be svg
+  * When TOOL is pdftocairo, IR must be pdf
+EOF
+}
+
+opt_ir=pdf
+opt_output=svg
+opt_tool=pdftocairo
+
+# Parse options
+while test $# -gt 0; do
+    case "$1" in
+        --ir)
+            opt_ir="$2"
+            shift
+            shift
+            ;;
+        -o|--output)
+            opt_output="$2"
+            shift
+            shift
+            ;;
+        -t|--tool)
+            opt_tool="$2"
+            shift
+            shift
+            ;;
+        *)
+            echo "error: unexpected argument '$1'"
+            print_help
+            exit 1
+            ;;
+    esac
+done
+
+# Validate options
+case "$opt_ir" in
+    dvi) ;;
+    pdf) ;;
+    *)
+        echo "error: invalid value '$opt_ir' for the --ir option"
+        print_help
+        exit 1
+        ;;
+esac
+case "$opt_output" in
+    jpeg) ;;
+    pdf) ;;
+    png) ;;
+    svg) ;;
+    *)
+        echo "error: invalid value '$opt_output' for the --output option"
+        print_help
+        exit 1
+        ;;
+esac
+case "$opt_tool" in
+    dvisvgm) ;;
+    pdftocairo) ;;
+    *)
+        echo "error: invalid value '$opt_tool' for the --tool option"
+        print_help
+        exit 1
+        ;;
+esac
+
 tempdir=$(mktemp --directory)
 
-function cleanup() {
+cleanup() {
     rm -rf $tempdir
 }
 
@@ -15,19 +105,31 @@ cd $tempdir
 # Write stdin to file.tex
 cat >file.tex
 
-# Latex Options:
-#
-# * -no-shell-escape - Prevent the ability to run shell commands restricted or
-# otherwise since we are potentially processing untrusted input.
-# * -output-format=dvi - Make the default output explicit.
-# * -halt-on-error - Halt on first error.
-latex -no-shell-escape -output-format=dvi -halt-on-error file.tex 1>&2
+latex $LATEX_OPTIONS -output-format=$opt_ir file.tex 1>&2
 
-# Dvisvgm Options:
-#
-# * --font-format=woff - Embeds fonts in the SVG using the Web Open Font
-# Format. This increases the size of the SVG but improves font rendering.
-dvisvgm --font-format=woff file.dvi
+case "$opt_tool" in
+    dvisvgm)
+        case "$opt_ir" in
+            dvi)
+                dvisvgm --stdout $DVISVGM_OPTIONS file.dvi
+                ;;
+            pdf)
+                dvisvgm --stdout $DVISVGM_OPTIONS --pdf file.pdf
+                ;;
+        esac
+        ;;
+    pdftocairo)
+        case "$opt_output" in
+            jpeg|png)
+                pdftocairo -singlefile -$opt_output file.pdf -
+                ;;
+            svg)
+                pdftocairo -$opt_output file.pdf -
+                ;;
+            pdf)
+                cat file.pdf
+                ;;
+        esac
 
-# Write file.svg to stdout
-cat *.svg
+        ;;
+esac
