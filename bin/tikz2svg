@@ -1,97 +1,78 @@
 #!/bin/sh
 
+# Usage: tikz2svg <output-format> <input.tex >output
+#
+# Converts PGF/TikZ on stdin to one of the supported output formats (jpeg,
+# pdf, png, svg) on stdout.
+
 set -x
 set -e
 
 # Latex Options:
 #
 # * -no-shell-escape - Prevent the ability to run shell commands restricted or
-# otherwise since we are potentially processing untrusted input.
+#   otherwise since we are potentially processing untrusted input.
 # * -halt-on-error - Halt on first error.
 LATEX_OPTIONS="-no-shell-escape -halt-on-error"
 
 # Dvisvgm Options:
 #
 # * --font-format=woff - Embeds fonts in the SVG using the Web Open Font
-# Format. This increases the size of the SVG but improves font rendering.
+#   Format. This increases the size of the SVG but improves font rendering.
 DVISVGM_OPTIONS="--font-format=woff"
 
-print_help() {
-    cat <EOF
-Usage: $0 [options]
+backend_driver() {
+    output_format=$1
 
-Options:
-      --ir IR - The intermediate representation. Valid values: dvi, pdf. Default: pdf
-  -o, --output OUTPUT - The output format. Valid values: jpeg, pdf, png, svg. Default: svg
-  -t, --tool TOOL - The tool to use to generate the output. Valid values: dvisvgm, pdftocairo. Default: pdftocairo
-
-Valid combinations:
-
-  * When TOOL is dvisvgm, OUTPUT must be svg
-  * When TOOL is pdftocairo, IR must be pdf
-EOF
-}
-
-opt_ir=pdf
-opt_output=svg
-opt_tool=pdftocairo
-
-# Parse options
-while test $# -gt 0; do
-    case "$1" in
-        --ir)
-            opt_ir="$2"
-            shift
-            shift
+    case $output_format in
+        jpeg)
+            echo
             ;;
-        -o|--output)
-            opt_output="$2"
-            shift
-            shift
+        pdf)
+            echo
             ;;
-        -t|--tool)
-            opt_tool="$2"
-            shift
-            shift
+        png)
+            echo
             ;;
-        *)
-            echo "error: unexpected argument '$1'"
-            print_help
-            exit 1
+        svg)
+            echo dvisvgm
             ;;
     esac
-done
+}
 
-# Validate options
-case "$opt_ir" in
-    dvi) ;;
-    pdf) ;;
-    *)
-        echo "error: invalid value '$opt_ir' for the --ir option"
-        print_help
-        exit 1
-        ;;
-esac
-case "$opt_output" in
-    jpeg) ;;
-    pdf) ;;
-    png) ;;
-    svg) ;;
-    *)
-        echo "error: invalid value '$opt_output' for the --output option"
-        print_help
-        exit 1
-        ;;
-esac
-case "$opt_tool" in
-    dvisvgm) ;;
-    pdftocairo) ;;
-    *)
-        echo "error: invalid value '$opt_tool' for the --tool option"
-        print_help
-        exit 1
-        ;;
-esac
+intermediate_format() {
+    output_format=$1
+
+    case $output_format in
+        jpeg|pdf|png)
+            echo pdf
+            ;;
+        svg)
+            echo dvi
+            ;;
+    esac
+}
+
+documentclass_present() {
+    raw_input=$1
+    grep '^\s*\\documentclass\b' $raw_input >/dev/null 2>&1
+}
+
+infer_documentclass() {
+    output_format=$1
+    echo "\\documentclass[$(backend_driver $output_format)]{standalone}"
+}
+
+maybe_add_documentclass() {
+    output_format=$1
+    raw_input=$2
+    if ! documentclass_present $raw_input; then
+        infer_documentclass $output_format
+    fi
+    cat $raw_input
+}
+
+output_format="$1"
 
 tempdir=$(mktemp --directory)
 
@@ -101,35 +82,20 @@ cleanup() {
 
 trap cleanup 0
 
-cd $tempdir
-# Write stdin to file.tex
-cat >file.tex
+# Write stdin to raw_input.tex
+cat >raw_input.tex
 
-latex $LATEX_OPTIONS -output-format=$opt_ir file.tex 1>&2
+maybe_add_documentclass $output_format raw_input.tex > file.tex
+latex $LATEX_OPTIONS -output-format=$(intermediate_format $output_format) file.tex 1>&2
 
-case "$opt_tool" in
-    dvisvgm)
-        case "$opt_ir" in
-            dvi)
-                dvisvgm --stdout $DVISVGM_OPTIONS file.dvi
-                ;;
-            pdf)
-                dvisvgm --stdout $DVISVGM_OPTIONS --pdf file.pdf
-                ;;
-        esac
+case "$output_format" in
+    jpeg|png)
+        pdftocairo -singlefile -$output_format file.pdf -
         ;;
-    pdftocairo)
-        case "$opt_output" in
-            jpeg|png)
-                pdftocairo -singlefile -$opt_output file.pdf -
-                ;;
-            svg)
-                pdftocairo -$opt_output file.pdf -
-                ;;
-            pdf)
-                cat file.pdf
-                ;;
-        esac
-
+    pdf)
+        cat file.pdf
+        ;;
+    svg)
+        dvisvgm --stdout $DVISVGM_OPTIONS file.dvi
         ;;
 esac
