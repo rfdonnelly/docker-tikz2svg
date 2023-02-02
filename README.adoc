@@ -1,6 +1,6 @@
-= docker-tikz2image
+= docker-tikz2svg
 
-A Docker image that converts a TikZ picture to a JPEG, PDF, PNG, or SVG.
+A Docker image that converts PGF/TikZ to JPEG, PDF, PNG, or SVG.
 
 == Build
 
