@@ -34,6 +34,6 @@ RUN apk add --no-cache \
     texmf-dist-science
 
 COPY --from=dvisvgm-builder /usr/local/bin/dvisvgm /usr/local/bin
-COPY bin/tikz2svg /usr/local/bin
+COPY bin/tikz2image /usr/local/bin
 
-CMD ["tikz2svg"]
+ENTRYPOINT ["tikz2image"]

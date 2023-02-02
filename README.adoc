@@ -1,25 +1,28 @@
-= docker-tikz2svg
+= docker-tikz2image
 
-A Docker image that converts a TikZ picture to an SVG.
+A Docker image that converts a TikZ picture to a JPEG, PDF, PNG, or SVG.
 
 == Build
 
- docker build -t tikz2svg .
+ docker build -t tikz2image
 
 == Run
 
-[source,sh]
-----
-docker run \
-    --rm \
-    --interactive \
-    --attach stdin \
-    --attach stdout \
-    --attach stderr \
-    tikz2svg \
-    <input.tex \
-    >output.svg
-----
+=== JPEG
+
+ docker run --rm -i tikz2image jpeg <input.tex >output.jpeg
+
+=== PDF
+
+ docker run --rm -i tikz2image pdf <input.tex >output.pdf
+
+=== PNG
+
+ docker run --rm -i tikz2image png <input.tex >output.png
+
+=== SVG
+
+ docker run --rm -i tikz2image svg <input.tex >output.svg
 
 == Examples
 
