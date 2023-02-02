@@ -82,6 +82,8 @@ cleanup() {
 
 trap cleanup 0
 
+cd $tempdir
+
 # Write stdin to raw_input.tex
 cat >raw_input.tex
 
