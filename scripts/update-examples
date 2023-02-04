@@ -7,7 +7,7 @@ for path in examples/*; do
     if test -d $path; then
         for format in jpeg pdf png svg; do
             ls $path/input.tex
-            docker run --rm -i tikz2image $format <$path/input.tex >$path/output.$format
+            docker run --rm -i tikz2svg $format <$path/input.tex >$path/output.$format
         done
     fi
 done
