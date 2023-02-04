@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+run_inside_docker() {
+    docker run \
+        --rm \
+        -i \
+        -v $PWD:/src \
+        -w /src \
+        --entrypoint '' \
+        -u $(id -u):$(id -g) \
+        tikz2svg \
+        "$@"
+}
+
+main() {
+    # pgfversion
+    echo '\documentclass{article} \usepackage{tikz} \message{^^Jpgfversion:\pgfversion:} \end{document}' > pgfversion.tex
+    printf 'pgfversion: '
+    latex pgfversion.tex | grep pgfversion: | cut -d: -f2
+
+    latex -version | head -n2
+
+    dvisvgm --version
+
+    pdftocairo -v 2>&1 | head -n1
+}
+
+if test "$1" = "docker"; then
+    run_inside_docker $0
+else
+    main
+fi
