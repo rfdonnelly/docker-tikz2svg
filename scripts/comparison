@@ -1,0 +1,65 @@
+#!/bin/sh
+
+set -e
+set -x
+
+build() {
+    docker build -t tikz2svg .
+}
+
+run() {
+    docker run \
+        --rm \
+        -v $PWD:/src \
+        -w /src \
+        --entrypoint '' \
+        -u $(id -u):$(id -g) \
+        tikz2svg \
+        "$@"
+}
+
+# run() {
+#     docker run \
+#         --rm \
+#         -v $PWD:/src \
+#         -w /src \
+#         -u $(id -u):$(id -g) \
+#         texlive/texlive \
+#         "$@"
+# }
+
+add_driver() {
+    input="$1"
+    shift
+    options="$@"
+
+    echo "\\documentclass[$options]{standalone}"
+    cat $input
+}
+
+input=$1
+input_name=$(basename $input .tex)
+input_path=$(dirname $input)
+input_with_dvisvgm_driver=dvisvgm
+input_with_default_driver=default
+
+build
+
+cd $input_path
+input=$(basename $input)
+
+# add_driver $input dvisvgm > $input_with_dvisvgm_driver.tex
+# add_driver $input > $input_with_default_driver.tex
+
+run latex -output-format=dvi $input_with_dvisvgm_driver.tex
+run latex -output-format=dvi $input_with_default_driver.tex
+run latex -output-format=pdf $input_with_default_driver.tex
+
+# run dvisvgm --font-format=woff --libgs=/usr/lib/x86_64-linux-gnu/libgs.so.10 $input_with_dvisvgm_driver.dvi
+# run dvisvgm --font-format=woff --libgs=/usr/lib/x86_64-linux-gnu/libgs.so.10 $input_with_default_driver.dvi
+run dvisvgm --font-format=woff $input_with_dvisvgm_driver.dvi
+run dvisvgm --font-format=woff $input_with_default_driver.dvi
+run pdftocairo -svg $input_with_default_driver.pdf pdftocairo.svg
+
+cd -
+run scripts/versions
