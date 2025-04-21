@@ -4,7 +4,7 @@ A Docker image that converts PGF/TikZ to JPEG, PDF, PNG, or SVG.
 
 == Build
 
- docker build -t tikz2svg
+ docker build -t tikz2svg .
 
 == Run
 
