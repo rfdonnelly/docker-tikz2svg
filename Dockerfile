@@ -1,5 +1,5 @@
 ARG ALPINE_VERSION=3.17
-FROM alpine:$ALPINE_VERSION as dvisvgm-builder
+FROM alpine:$ALPINE_VERSION AS dvisvgm-builder
 
 RUN apk add --no-cache \
     build-base \
