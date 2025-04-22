@@ -33,6 +33,9 @@ RUN apk add --no-cache \
     texmf-dist-pstricks \
     texmf-dist-science
 
+RUN apk add --no-cache \
+    sed
+
 COPY --from=dvisvgm-builder /usr/local/bin/dvisvgm /usr/local/bin
 COPY bin/tikz2svg /usr/local/bin
 
