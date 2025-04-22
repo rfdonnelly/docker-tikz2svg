@@ -31,6 +31,9 @@ backend_driver() {
         pdf)
             echo
             ;;
+        dvi)
+            echo
+            ;;
         png)
             echo
             ;;
@@ -47,8 +50,17 @@ intermediate_format() {
         jpeg|pdf|png)
             echo pdf
             ;;
+        dvi)
+            echo dvi
+            ;;
         svg)
             echo dvi
+            ;;
+        dvisvgm-pdf-svg)
+            echo pdf
+            ;;
+        pdftocairo-pdf-svg)
+            echo pdf
             ;;
     esac
 }
@@ -97,7 +109,16 @@ case "$output_format" in
     pdf)
         cat file.pdf
         ;;
+    dvi)
+        cat file.dvi
+        ;;
     svg)
         dvisvgm --stdout $DVISVGM_OPTIONS file.dvi
+        ;;
+    dvisvgm-pdf-svg)
+        dvisvgm --stdout $DVISVGM_OPTIONS --pdf file.pdf
+        ;;
+    pdftocairo-pdf-svg)
+        pdftocairo -f 1 -l 1 -svg file.pdf -
         ;;
 esac
